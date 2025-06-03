@@ -1,0 +1,173 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 100%; /* #ffffff */
+  --foreground: 220 13% 6%; /* #111 */
+  --muted: 220 6% 97%; /* #f7f7f7 */
+  --muted-foreground: 220 8% 62%; /* #9CA3AF */
+  --popover: 0 0% 100%; /* #ffffff */
+  --popover-foreground: 220 13% 6%; /* #111 */
+  --card: 0 0% 100%; /* #ffffff */
+  --card-foreground: 220 13% 6%; /* #111 */
+  --border: 220 6% 85%; /* #D9D9D9 */
+  --input: 220 6% 85%; /* #D9D9D9 */
+  --primary: 255 69% 71%; /* #986DFF */
+  --primary-foreground: 0 0% 100%; /* #ffffff */
+  --secondary: 220 6% 97%; /* #f7f7f7 */
+  --secondary-foreground: 220 13% 9%; /* #151515 */
+  --accent: 220 6% 97%; /* #f7f7f7 */
+  --accent-foreground: 220 13% 9%; /* #151515 */
+  --destructive: 0 76% 55%; /* #E51D37 */
+  --destructive-foreground: 0 0% 100%; /* #ffffff */
+  --ring: 255 69% 71%; /* #986DFF */
+  --radius: 0.5rem;
+  
+  /* Custom colors */
+  --purple: 255 69% 71%; /* #986DFF */
+  --gray-custom: 220 8% 62%; /* #9CA3AF */
+  --ice-white: 220 6% 85%; /* #D9D9D9 */
+  --medium-white: 220 6% 97%; /* #f7f7f7 */
+  --medium-black: 0 0% 8%; /* #151515 */
+  --light-black: 0 0% 12%; /* #1F1F1F */
+  --green: 104 86% 81%; /* #A6FB98 */
+  --red: 0 76% 55%; /* #E51D37 */
+  --blue: 200 100% 50%; /* #00a3ff */
+  --yellow: 56 99% 61%; /* #FEEC37 */
+}
+
+.dark {
+  --background: 0 0% 8%; /* #151515 */
+  --foreground: 0 0% 100%; /* #ffffff */
+  --muted: 0 0% 12%; /* #1F1F1F */
+  --muted-foreground: 220 8% 62%; /* #9CA3AF */
+  --popover: 0 0% 12%; /* #1F1F1F */
+  --popover-foreground: 0 0% 100%; /* #ffffff */
+  --card: 0 0% 12%; /* #1F1F1F */
+  --card-foreground: 0 0% 100%; /* #ffffff */
+  --border: 220 8% 25%; /* darker gray */
+  --input: 220 8% 25%; /* darker gray */
+  --primary: 255 69% 71%; /* #986DFF */
+  --primary-foreground: 0 0% 100%; /* #ffffff */
+  --secondary: 0 0% 12%; /* #1F1F1F */
+  --secondary-foreground: 0 0% 100%; /* #ffffff */
+  --accent: 0 0% 12%; /* #1F1F1F */
+  --accent-foreground: 0 0% 100%; /* #ffffff */
+  --destructive: 0 76% 55%; /* #E51D37 */
+  --destructive-foreground: 0 0% 100%; /* #ffffff */
+  --ring: 255 69% 71%; /* #986DFF */
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-archivo;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  
+  html {
+    font-family: 'Archivo', sans-serif;
+  }
+}
+
+@layer utilities {
+  .font-archivo {
+    font-family: 'Archivo', sans-serif;
+  }
+  
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+  
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-muted;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-md;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+/* Markdown content styling */
+.markdown-content {
+  @apply prose prose-gray dark:prose-invert max-w-none;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3,
+.markdown-content h4,
+.markdown-content h5,
+.markdown-content h6 {
+  @apply font-archivo font-semibold;
+}
+
+.markdown-content h1 {
+  @apply text-3xl mb-6 mt-8;
+}
+
+.markdown-content h2 {
+  @apply text-2xl mb-4 mt-6;
+}
+
+.markdown-content h3 {
+  @apply text-xl mb-3 mt-5;
+}
+
+.markdown-content p {
+  @apply mb-4 leading-relaxed;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  @apply mb-4 ml-6;
+}
+
+.markdown-content li {
+  @apply mb-1;
+}
+
+.markdown-content a {
+  @apply text-primary hover:text-primary/80 transition-colors;
+}
+
+.markdown-content blockquote {
+  @apply border-l-4 border-primary/20 pl-4 italic bg-muted/50 p-4 rounded-r-lg;
+}
+
+.markdown-content code {
+  @apply bg-muted px-2 py-1 rounded text-sm font-mono;
+}
+
+.markdown-content pre {
+  @apply bg-muted p-4 rounded-lg overflow-x-auto mb-4;
+}
+
+.markdown-content pre code {
+  @apply bg-transparent p-0;
+}
