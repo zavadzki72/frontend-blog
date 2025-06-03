@@ -20,6 +20,7 @@ const translations = {
     "nav.logout": "Sair",
     "nav.profile": "Perfil",
     "nav.admin": "Admin",
+    "nav.back_to_site": "Voltar ao Site",
     
     // Homepage
     "home.featured": "Post em Destaque",
@@ -198,6 +199,7 @@ const translations = {
     "nav.logout": "Logout",
     "nav.profile": "Profile",
     "nav.admin": "Admin",
+    "nav.back_to_site": "Back to Site",
     
     // Homepage
     "home.featured": "Featured Post",

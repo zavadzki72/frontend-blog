@@ -77,18 +77,14 @@ export function CreatePostPage() {
       };
       
       const postId = await api.createPost(postData);
-      console.log("Post created with ID:", postId);
       
       if (uploadedFile && postId) {
-        console.log("Uploading image for post:", postId);
         const imageKey = await api.uploadPostImage(uploadedFile, postId);
-        console.log("Image uploaded with key:", imageKey);
         
         await api.updatePost(postId, {
           ...postData,
           coverImageUrl: imageKey,
         });
-        console.log("Post updated with image");
       }
     },
     onSuccess: () => {

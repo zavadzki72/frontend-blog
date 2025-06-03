@@ -82,13 +82,10 @@ export const api = {
     });
     
     const responseText = await response.text();
-    console.log("Create post response:", responseText);
     
     try {
       const data = JSON.parse(responseText);
-      console.log("Parsed response:", data);
       
-      // Tentar diferentes formatos de resposta
       if (data.Data) {
         return data.Data;
       } else if (data.data) {

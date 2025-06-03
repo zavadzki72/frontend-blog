@@ -18,6 +18,12 @@ import { getInitials } from "@/lib/utils";
 import { api } from "@/lib/api";
 import logoWhite from '../assets/images/logo.png';
 import logoBlack from '../assets/images/logo_black.png';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export function Header() {
   const [location] = useLocation();
@@ -79,6 +85,24 @@ export function Header() {
         </nav>
 
         <div className="flex items-center space-x-3">
+          <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => window.open('https://marccusz.com', '_self')}
+                    className="h-9 w-9 p-0 cursor-pointer group transition-all duration-300 hover:bg-primary/10 hover:scale-105"
+                  >
+                    <i className="fas fa-globe text-sm text-muted-foreground group-hover:text-primary transition-colors duration-200"></i>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{t("nav.back_to_site")}</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
           <DropdownMenu onOpenChange={setLanguageDropdownOpen}>
             <DropdownMenuTrigger asChild>
               <Button

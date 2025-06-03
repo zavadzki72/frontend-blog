@@ -33,7 +33,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const refreshUser = async () => {
     try {
       const userData = await api.getUser();
-      console.log("User data received:", userData);
       setUser(userData);
     } catch (error) {
       console.error("Error fetching user data:", error);
