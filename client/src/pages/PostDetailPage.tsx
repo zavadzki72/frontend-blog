@@ -178,64 +178,41 @@ export function PostDetailPage() {
 
   return (
     <article className="min-h-screen">
-      <section className="relative py-8">
+      {/* Cover Image Section */}
+      {coverImageUrl && (
+        <section className="relative">
+          <div className="aspect-[1200/628] overflow-hidden">
+            <img
+              src={coverImageUrl}
+              alt={post.title}
+              className="h-full w-full object-cover"
+            />
+          </div>
+        </section>
+      )}
+
+      {/* Post Header Section */}
+      <section className="py-8">
         <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-          {coverImageUrl ? (
-            <div className="relative aspect-[1200/628] overflow-hidden rounded-lg mb-8">
-              <img
-                src={coverImageUrl}
-                alt={post.title}
-                className="h-full w-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
-              
-              <div className="absolute bottom-0 left-0 right-0 p-8 text-white z-10">
-                <div className="mb-6 flex flex-wrap items-center gap-3">
-                  {categories.map((category, index) => (
-                    <Badge key={index} variant="secondary">
-                      {category}
-                    </Badge>
-                  ))}
-                  <span className="text-sm opacity-80">
-                    {formatDate(post.createdAt)}
-                  </span>
-                </div>
-                
-                <h1 className="text-4xl font-bold leading-tight md:text-5xl mb-6">
-                  {getPostTitle(post)}
-                </h1>
-                
-                {getPostSubTitle(post) && (
-                  <p className="text-xl leading-relaxed opacity-90">
-                    {getPostSubTitle(post)}
-                  </p>
-                )}
-              </div>
-            </div>
-          ) : (
-            <div className="py-12">
-              {/* Meta Info */}
-              <div className="mb-6 flex flex-wrap items-center gap-3">
-                {categories.map((category, index) => (
-                  <Badge key={index} variant="default">
-                    {category}
-                  </Badge>
-                ))}
-                <span className="text-sm text-muted-foreground">
-                  {formatDate(post.createdAt)}
-                </span>
-              </div>
-              
-              <h1 className="text-4xl font-bold leading-tight md:text-5xl mb-6">
-                {getPostTitle(post)}
-              </h1>
-              
-              {getPostSubTitle(post) && (
-                <p className="text-xl leading-relaxed text-muted-foreground">
-                  {getPostSubTitle(post)}
-                </p>
-              )}
-            </div>
+          <div className="mb-6 flex flex-wrap items-center gap-3">
+            {categories.map((category, index) => (
+              <Badge key={index} variant="default">
+                {category}
+              </Badge>
+            ))}
+            <span className="text-sm text-muted-foreground">
+              {formatDate(post.createdAt)}
+            </span>
+          </div>
+          
+          <h1 className="text-4xl font-bold leading-tight md:text-5xl mb-6">
+            {getPostTitle(post)}
+          </h1>
+          
+          {getPostSubTitle(post) && (
+            <p className="text-xl leading-relaxed text-muted-foreground">
+              {getPostSubTitle(post)}
+            </p>
           )}
         </div>
       </section>
