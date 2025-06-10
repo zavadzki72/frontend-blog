@@ -1,5 +1,9 @@
 
-import { useEffect, useState } from "react";
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeRaw from 'rehype-raw';
+import 'highlight.js/styles/github.css';
 
 interface MarkdownRendererProps {
   content: string;
@@ -7,129 +11,114 @@ interface MarkdownRendererProps {
 }
 
 export function MarkdownRenderer({ content, className = "" }: MarkdownRendererProps) {
-  const [htmlContent, setHtmlContent] = useState("");
-
-  useEffect(() => {
-    const parseMarkdown = (markdown: string): string => {
-      let html = markdown;
-
-      // Escape HTML tags first to prevent conflicts
-      const htmlEntities: { [key: string]: string } = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#39;'
-      };
-
-      // Process code blocks first (to preserve their content)
-      const codeBlocks: string[] = [];
-      html = html.replace(/```(\w+)?\n([\s\S]*?)```/g, (match, lang, code) => {
-        const placeholder = `__CODEBLOCK_${codeBlocks.length}__`;
-        const escapedCode = code.replace(/[&<>"']/g, (char: string) => htmlEntities[char]);
-        const languageClass = lang ? ` class="language-${lang}"` : '';
-        codeBlocks.push(`<pre><code${languageClass}>${escapedCode}</code></pre>`);
-        return placeholder;
-      });
-
-      // Process inline code
-      const inlineCodes: string[] = [];
-      html = html.replace(/`([^`\n]+)`/g, (match, code) => {
-        const placeholder = `__INLINECODE_${inlineCodes.length}__`;
-        const escapedCode = code.replace(/[&<>"']/g, (char: string) => htmlEntities[char]);
-        inlineCodes.push(`<code>${escapedCode}</code>`);
-        return placeholder;
-      });
-
-      // Headers (must be processed before other formatting)
-      html = html.replace(/^#{6}\s+(.+)$/gm, '<h6>$1</h6>');
-      html = html.replace(/^#{5}\s+(.+)$/gm, '<h5>$1</h5>');
-      html = html.replace(/^#{4}\s+(.+)$/gm, '<h4>$1</h4>');
-      html = html.replace(/^#{3}\s+(.+)$/gm, '<h3>$1</h3>');
-      html = html.replace(/^#{2}\s+(.+)$/gm, '<h2>$1</h2>');
-      html = html.replace(/^#{1}\s+(.+)$/gm, '<h1>$1</h1>');
-
-      // Bold and Italic
-      html = html.replace(/\*\*\*(.*?)\*\*\*/g, '<strong><em>$1</em></strong>');
-      html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-      html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
-
-      // Links
-      html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
-
-      // Horizontal rules
-      html = html.replace(/^---+$/gm, '<hr>');
-
-      // Tables
-      html = html.replace(/\|(.+)\|\s*\n\|[\s\-\|:]+\|\s*\n((?:\|.+\|\s*\n?)*)/g, (match, header, rows) => {
-        const headerCells = header.split('|').map((cell: string) => cell.trim()).filter((cell: string) => cell);
-        const headerHtml = headerCells.map((cell: string) => `<th>${cell}</th>`).join('');
-        
-        const rowsHtml = rows.trim().split('\n').map((row: string) => {
-          const cells = row.split('|').map((cell: string) => cell.trim()).filter((cell: string) => cell);
-          return `<tr>${cells.map((cell: string) => `<td>${cell}</td>`).join('')}</tr>`;
-        }).join('');
-
-        return `<table class="markdown-table"><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table>`;
-      });
-
-      // Lists (unordered) - improved handling with proper spacing
-      html = html.replace(/^[\s]*[-*+]\s+(.+)$/gm, (match, content) => {
-        return `<li class="markdown-list-item">${content.trim()}</li>`;
-      });
-      
-      // Lists (ordered) - improved handling with proper spacing
-      html = html.replace(/^[\s]*\d+\.\s+(.+)$/gm, (match, content) => {
-        return `<li class="markdown-list-item markdown-ordered-item">${content.trim()}</li>`;
-      });
-
-      // Group consecutive list items with proper spacing
-      html = html.replace(/((?:<li class="markdown-list-item"[^>]*>.*?<\/li>\s*)+)/g, (match) => {
-        if (match.includes('markdown-ordered-item')) {
-          return `\n<ol class="markdown-list">${match}</ol>\n`;
-        }
-        return `\n<ul class="markdown-list">${match}</ul>\n`;
-      });
-
-      // Blockquotes
-      html = html.replace(/^>\s*(.+)$/gm, '<blockquote>$1</blockquote>');
-      html = html.replace(/((?:<blockquote>.*<\/blockquote>\s*)+)/g, '<blockquote>$1</blockquote>');
-      html = html.replace(/<blockquote><blockquote>/g, '<blockquote>');
-      html = html.replace(/<\/blockquote><\/blockquote>/g, '</blockquote>');
-
-      // Line breaks and paragraphs
-      html = html.replace(/\n\n/g, '</p><p>');
-      html = html.replace(/\n/g, '<br>');
-
-      // Wrap content in paragraphs (avoid wrapping block elements)
-      if (html && !html.match(/^<(?:h[1-6]|ul|ol|table|blockquote|pre|hr)/)) {
-        html = `<p>${html}</p>`;
-      }
-
-      // Clean up empty paragraphs
-      html = html.replace(/<p><\/p>/g, '');
-      html = html.replace(/<p>(<(?:h[1-6]|ul|ol|table|blockquote|pre|hr)[^>]*>.*?<\/(?:h[1-6]|ul|ol|table|blockquote|pre|hr)>)<\/p>/g, '$1');
-
-      // Restore code blocks
-      codeBlocks.forEach((codeBlock, index) => {
-        html = html.replace(`__CODEBLOCK_${index}__`, codeBlock);
-      });
-
-      // Restore inline codes
-      inlineCodes.forEach((inlineCode, index) => {
-        html = html.replace(`__INLINECODE_${index}__`, inlineCode);
-      });
-
-      return html;
-    };
-
-    setHtmlContent(parseMarkdown(content));
-  }, [content]);
-
   return (
-    <div 
-      className={`markdown-content prose prose-gray dark:prose-invert max-w-none ${className}`}
-      dangerouslySetInnerHTML={{ __html: htmlContent }}
-    />
+    <div className={`markdown-content ${className}`}>
+      <ReactMarkdown
+        remarkPlugins={[remarkGfm]}
+        rehypePlugins={[rehypeHighlight, rehypeRaw]}
+        components={{
+          // Customizar componentes específicos se necessário
+          code: ({ node, inline, className, children, ...props }) => {
+            const match = /language-(\w+)/.exec(className || '');
+            return !inline && match ? (
+              <pre className="bg-muted/70 p-6 rounded-lg overflow-x-auto mb-6 border border-border/50">
+                <code className={className} {...props}>
+                  {children}
+                </code>
+              </pre>
+            ) : (
+              <code className="bg-muted px-2 py-1 rounded text-sm font-mono text-primary" {...props}>
+                {children}
+              </code>
+            );
+          },
+          table: ({ children }) => (
+            <table className="markdown-table w-full border-collapse mb-4 border border-muted-foreground/20 rounded-lg overflow-hidden">
+              {children}
+            </table>
+          ),
+          th: ({ children }) => (
+            <th className="bg-muted/50 px-4 py-2 text-left font-semibold border-b border-muted-foreground/20">
+              {children}
+            </th>
+          ),
+          td: ({ children }) => (
+            <td className="px-4 py-2 border-b border-muted-foreground/10">
+              {children}
+            </td>
+          ),
+          blockquote: ({ children }) => (
+            <blockquote className="border-l-4 border-primary/30 pl-6 pr-4 py-4 italic bg-muted/30 rounded-r-lg mb-6 text-muted-foreground">
+              {children}
+            </blockquote>
+          ),
+          ul: ({ children }) => (
+            <ul className="markdown-list mb-6 ml-0 pl-6 space-y-2">
+              {children}
+            </ul>
+          ),
+          ol: ({ children }) => (
+            <ol className="markdown-list mb-6 ml-0 pl-6 space-y-2">
+              {children}
+            </ol>
+          ),
+          li: ({ children }) => (
+            <li className="markdown-list-item mb-2 leading-relaxed">
+              {children}
+            </li>
+          ),
+          h1: ({ children }) => (
+            <h1 className="text-3xl mb-6 mt-8 first:mt-0 font-archivo font-semibold">
+              {children}
+            </h1>
+          ),
+          h2: ({ children }) => (
+            <h2 className="text-2xl mb-4 mt-6 font-archivo font-semibold">
+              {children}
+            </h2>
+          ),
+          h3: ({ children }) => (
+            <h3 className="text-xl mb-3 mt-5 font-archivo font-semibold">
+              {children}
+            </h3>
+          ),
+          h4: ({ children }) => (
+            <h4 className="text-lg mb-3 mt-4 font-archivo font-semibold">
+              {children}
+            </h4>
+          ),
+          h5: ({ children }) => (
+            <h5 className="text-base mb-2 mt-3 font-archivo font-semibold">
+              {children}
+            </h5>
+          ),
+          h6: ({ children }) => (
+            <h6 className="text-sm mb-2 mt-3 font-archivo font-semibold">
+              {children}
+            </h6>
+          ),
+          p: ({ children }) => (
+            <p className="mb-4 leading-relaxed">
+              {children}
+            </p>
+          ),
+          a: ({ href, children }) => (
+            <a 
+              href={href} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-primary hover:text-primary/80 transition-colors underline"
+            >
+              {children}
+            </a>
+          ),
+          hr: () => (
+            <hr className="border-muted-foreground/20 my-8 border-t-2" />
+          ),
+        }}
+      >
+        {content}
+      </ReactMarkdown>
+    </div>
   );
 }

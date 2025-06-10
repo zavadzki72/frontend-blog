@@ -115,115 +115,106 @@
 
 /* Markdown content styling */
 .markdown-content {
-  @apply prose prose-gray dark:prose-invert max-w-none;
+  @apply max-w-none text-foreground;
+  line-height: 1.7;
 }
 
-.markdown-content h1,
-.markdown-content h2,
-.markdown-content h3,
-.markdown-content h4,
-.markdown-content h5,
-.markdown-content h6 {
-  @apply font-archivo font-semibold;
-}
-
-.markdown-content h1 {
-  @apply text-3xl mb-6 mt-8 first:mt-0;
-}
-
-.markdown-content h2 {
-  @apply text-2xl mb-4 mt-6;
-}
-
-.markdown-content h3 {
-  @apply text-xl mb-3 mt-5;
-}
-
-.markdown-content h4 {
-  @apply text-lg mb-3 mt-4;
-}
-
-.markdown-content h5 {
-  @apply text-base mb-2 mt-3;
-}
-
-.markdown-content h6 {
-  @apply text-sm mb-2 mt-3;
-}
-
-.markdown-content p {
-  @apply mb-4 leading-relaxed;
-}
-
-.markdown-content .markdown-list {
-  @apply mb-6 ml-0 pl-6 space-y-2;
-}
-
-.markdown-content .markdown-list-item {
-  @apply mb-2 leading-relaxed;
-}
-
+/* Estilos específicos para react-markdown */
 .markdown-content ul,
 .markdown-content ol {
-  @apply mb-6 ml-0 pl-6 space-y-2;
+  margin: 1rem 0 1.5rem 0 !important;
+  padding-left: 1.5rem !important;
 }
 
-.markdown-content li {
-  @apply mb-2 leading-relaxed;
+.markdown-content ul li,
+.markdown-content ol li {
+  margin: 0.5rem 0 !important;
+  line-height: 1.6 !important;
 }
 
-.markdown-content a {
-  @apply text-primary hover:text-primary/80 transition-colors underline;
+.markdown-content ul li::marker {
+  color: hsl(var(--primary));
 }
 
-.markdown-content blockquote {
-  @apply border-l-4 border-primary/30 pl-6 pr-4 py-4 italic bg-muted/30 rounded-r-lg mb-6 text-muted-foreground;
+.markdown-content ol li::marker {
+  color: hsl(var(--primary));
+  font-weight: 600;
 }
 
-.markdown-content blockquote p {
-  @apply mb-2 last:mb-0;
+/* Espaçamento entre listas consecutivas */
+.markdown-content ul + ul,
+.markdown-content ol + ol,
+.markdown-content ul + ol,
+.markdown-content ol + ul {
+  margin-top: 1rem !important;
 }
 
-.markdown-content hr {
-  @apply border-muted-foreground/20 my-8 border-t-2;
+/* Sublistas */
+.markdown-content li > ul,
+.markdown-content li > ol {
+  margin-top: 0.5rem !important;
+  margin-bottom: 0.5rem !important;
 }
 
-.markdown-content code {
-  @apply bg-muted px-2 py-1 rounded text-sm font-mono text-primary;
-  font-weight: 500;
+/* Códigos inline */
+.markdown-content code:not(pre code) {
+  background: hsl(var(--muted)) !important;
+  color: hsl(var(--primary)) !important;
+  padding: 0.25rem 0.5rem !important;
+  border-radius: 0.375rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 500 !important;
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
 }
 
+/* Blocos de código */
 .markdown-content pre {
-  @apply bg-muted/70 p-6 rounded-lg overflow-x-auto mb-6 border border-border/50;
-  line-height: 1.6;
+  background: hsl(var(--muted) / 0.7) !important;
+  border: 1px solid hsl(var(--border) / 0.5) !important;
+  border-radius: 0.5rem !important;
+  padding: 1.5rem !important;
+  margin: 1.5rem 0 !important;
+  overflow-x: auto !important;
+  line-height: 1.6 !important;
 }
 
 .markdown-content pre code {
-  @apply bg-transparent p-0 text-foreground;
-  font-weight: 400;
-  font-size: 0.875rem;
+  background: transparent !important;
+  color: hsl(var(--foreground)) !important;
+  padding: 0 !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
 }
 
-
-/* Tables */
-.markdown-content .markdown-table {
-  @apply w-full border-collapse mb-4 border border-muted-foreground/20 rounded-lg overflow-hidden;
+/* Tabelas */
+.markdown-content table {
+  border-collapse: collapse !important;
+  margin: 1.5rem 0 !important;
+  width: 100% !important;
+  border: 1px solid hsl(var(--muted-foreground) / 0.2) !important;
+  border-radius: 0.5rem !important;
+  overflow: hidden !important;
 }
 
-.markdown-content .markdown-table th {
-  @apply bg-muted/50 px-4 py-2 text-left font-semibold border-b border-muted-foreground/20;
+.markdown-content table th {
+  background: hsl(var(--muted) / 0.5) !important;
+  padding: 0.75rem 1rem !important;
+  text-align: left !important;
+  font-weight: 600 !important;
+  border-bottom: 1px solid hsl(var(--muted-foreground) / 0.2) !important;
 }
 
-.markdown-content .markdown-table td {
-  @apply px-4 py-2 border-b border-muted-foreground/10;
+.markdown-content table td {
+  padding: 0.75rem 1rem !important;
+  border-bottom: 1px solid hsl(var(--muted-foreground) / 0.1) !important;
 }
 
-.markdown-content .markdown-table tr:last-child td {
-  @apply border-b-0;
+.markdown-content table tr:last-child td {
+  border-bottom: none !important;
 }
 
-.markdown-content .markdown-table tr:hover {
-  @apply bg-muted/30;
+.markdown-content table tr:hover {
+  background: hsl(var(--muted) / 0.3) !important;
 }
 
 /* Code highlighting with improved colors */
