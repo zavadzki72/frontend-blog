@@ -128,7 +128,7 @@
 }
 
 .markdown-content h1 {
-  @apply text-3xl mb-6 mt-8;
+  @apply text-3xl mb-6 mt-8 first:mt-0;
 }
 
 .markdown-content h2 {
@@ -137,6 +137,18 @@
 
 .markdown-content h3 {
   @apply text-xl mb-3 mt-5;
+}
+
+.markdown-content h4 {
+  @apply text-lg mb-3 mt-4;
+}
+
+.markdown-content h5 {
+  @apply text-base mb-2 mt-3;
+}
+
+.markdown-content h6 {
+  @apply text-sm mb-2 mt-3;
 }
 
 .markdown-content p {
@@ -153,11 +165,11 @@
 }
 
 .markdown-content a {
-  @apply text-primary hover:text-primary/80 transition-colors;
+  @apply text-primary hover:text-primary/80 transition-colors underline;
 }
 
 .markdown-content blockquote {
-  @apply border-l-4 border-primary/20 pl-4 italic bg-muted/50 p-4 rounded-r-lg;
+  @apply border-l-4 border-primary/20 pl-4 italic bg-muted/50 p-4 rounded-r-lg mb-4;
 }
 
 .markdown-content code {
@@ -170,4 +182,49 @@
 
 .markdown-content pre code {
   @apply bg-transparent p-0;
+}
+
+.markdown-content hr {
+  @apply border-muted-foreground/20 my-8;
+}
+
+/* Tables */
+.markdown-content .markdown-table {
+  @apply w-full border-collapse mb-4 border border-muted-foreground/20 rounded-lg overflow-hidden;
+}
+
+.markdown-content .markdown-table th {
+  @apply bg-muted/50 px-4 py-2 text-left font-semibold border-b border-muted-foreground/20;
+}
+
+.markdown-content .markdown-table td {
+  @apply px-4 py-2 border-b border-muted-foreground/10;
+}
+
+.markdown-content .markdown-table tr:last-child td {
+  @apply border-b-0;
+}
+
+.markdown-content .markdown-table tr:hover {
+  @apply bg-muted/30;
+}
+
+/* Code highlighting */
+.markdown-content pre code.language-csharp,
+.markdown-content pre code.language-cs {
+  @apply text-blue-600 dark:text-blue-400;
+}
+
+.markdown-content pre code.language-sql {
+  @apply text-green-600 dark:text-green-400;
+}
+
+.markdown-content pre code.language-bash,
+.markdown-content pre code.language-shell {
+  @apply text-orange-600 dark:text-orange-400;
+}
+
+.markdown-content pre code.language-javascript,
+.markdown-content pre code.language-js {
+  @apply text-yellow-600 dark:text-yellow-400;
 }
