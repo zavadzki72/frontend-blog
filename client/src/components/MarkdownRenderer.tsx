@@ -73,22 +73,22 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
         return `<table class="markdown-table"><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table>`;
       });
 
-      // Lists (unordered) - improved handling
-      html = html.replace(/^[\s]*[-*+]\s+(.+)$/gm, (match, content, offset, string) => {
-        return `<li class="markdown-list-item">${content}</li>`;
+      // Lists (unordered) - improved handling with proper spacing
+      html = html.replace(/^[\s]*[-*+]\s+(.+)$/gm, (match, content) => {
+        return `<li class="markdown-list-item">${content.trim()}</li>`;
       });
       
-      // Lists (ordered) - improved handling
+      // Lists (ordered) - improved handling with proper spacing
       html = html.replace(/^[\s]*\d+\.\s+(.+)$/gm, (match, content) => {
-        return `<li class="markdown-list-item markdown-ordered-item">${content}</li>`;
+        return `<li class="markdown-list-item markdown-ordered-item">${content.trim()}</li>`;
       });
 
-      // Group consecutive list items
+      // Group consecutive list items with proper spacing
       html = html.replace(/((?:<li class="markdown-list-item"[^>]*>.*?<\/li>\s*)+)/g, (match) => {
         if (match.includes('markdown-ordered-item')) {
-          return `<ol class="markdown-list">${match}</ol>`;
+          return `\n<ol class="markdown-list">${match}</ol>\n`;
         }
-        return `<ul class="markdown-list">${match}</ul>`;
+        return `\n<ul class="markdown-list">${match}</ul>\n`;
       });
 
       // Blockquotes
