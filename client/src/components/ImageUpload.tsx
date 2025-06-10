@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { api } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { ImageCropper } from "./ImageCropper";
 
 interface ImageUploadProps {
   onImageUploaded: (imageKey: string) => void;
@@ -24,6 +25,9 @@ export function ImageUpload({
   const [isUploading, setIsUploading] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const [currentImageUrl, setCurrentImageUrl] = useState<string | null>(null);
+  const [showCropper, setShowCropper] = useState(false);
+  const [selectedImageSrc, setSelectedImageSrc] = useState<string>("");
+  const [originalFile, setOriginalFile] = useState<File | null>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
 
@@ -70,7 +74,19 @@ export function ImageUpload({
       return;
     }
 
-    // Create preview
+    // For user images, show cropper
+    if (type === "user") {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setSelectedImageSrc(e.target?.result as string);
+        setOriginalFile(file);
+        setShowCropper(true);
+      };
+      reader.readAsDataURL(file);
+      return;
+    }
+
+    // For post images, proceed as before
     const reader = new FileReader();
     reader.onload = (e) => {
       setPreview(e.target?.result as string);
@@ -84,20 +100,14 @@ export function ImageUpload({
       return;
     }
 
-    // For user images or existing post updates, upload immediately
+    // For existing post updates, upload immediately
     setIsUploading(true);
 
     try {
-      let imageKey: string;
-      if (type === "user") {
-        imageKey = await api.uploadUserImage(file);
-      } else {
-        if (!postId) {
-          throw new Error("Post ID is required for post image upload");
-        }
-        imageKey = await api.uploadPostImage(file, postId);
+      if (!postId) {
+        throw new Error("Post ID is required for post image upload");
       }
-
+      const imageKey = await api.uploadPostImage(file, postId);
       onImageUploaded(imageKey);
       
       toast({
@@ -117,6 +127,36 @@ export function ImageUpload({
 
   const handleClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleCropComplete = async (croppedFile: File) => {
+    setIsUploading(true);
+
+    try {
+      // Create preview from cropped file
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(croppedFile);
+
+      // Upload the cropped image
+      const imageKey = await api.uploadUserImage(croppedFile);
+      onImageUploaded(imageKey);
+      
+      toast({
+        title: "Imagem enviada com sucesso!",
+      });
+    } catch (error) {
+      toast({
+        title: "Erro no upload",
+        description: "Não foi possível enviar a imagem. Tente novamente.",
+        variant: "destructive",
+      });
+      setPreview(null);
+    } finally {
+      setIsUploading(false);
+    }
   };
 
   return (
@@ -185,6 +225,14 @@ export function ImageUpload({
           )}
         </Button>
       )}
+
+      <ImageCropper
+        isOpen={showCropper}
+        onClose={() => setShowCropper(false)}
+        imageSrc={selectedImageSrc}
+        onCropComplete={handleCropComplete}
+        aspectRatio={1}
+      />
     </div>
   );
 }
