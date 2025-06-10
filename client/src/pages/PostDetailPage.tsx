@@ -181,7 +181,7 @@ export function PostDetailPage() {
       <section className="relative py-8">
         <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           {coverImageUrl ? (
-            <div className="relative aspect-[21/9] overflow-hidden rounded-lg">
+            <div className="relative aspect-[1200/628] overflow-hidden rounded-lg mb-8">
               <img
                 src={coverImageUrl}
                 alt={post.title}
@@ -199,7 +199,6 @@ export function PostDetailPage() {
                   <span className="text-sm opacity-80">
                     {formatDate(post.createdAt)}
                   </span>
-
                 </div>
                 
                 <h1 className="text-4xl font-bold leading-tight md:text-5xl mb-6">
@@ -242,7 +241,7 @@ export function PostDetailPage() {
       </section>
 
       {/* Content */}
-      <section className="py-12">
+      <section className="py-8">
         <div className="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
           {/* Author Info & Actions */}
           <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
