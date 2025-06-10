@@ -181,7 +181,7 @@ export function PostDetailPage() {
       {/* Cover Image Section */}
       {coverImageUrl && (
         <section className="relative">
-          <div className="aspect-[16/9] overflow-hidden bg-muted flex items-center justify-center">
+          <div className="aspect-[16/9] lg:aspect-[21/9] xl:h-[400px] xl:aspect-auto overflow-hidden bg-muted flex items-center justify-center">
             <img
               src={coverImageUrl}
               alt={post.title}
