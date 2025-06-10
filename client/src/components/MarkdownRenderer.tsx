@@ -73,16 +73,22 @@ export function MarkdownRenderer({ content, className = "" }: MarkdownRendererPr
         return `<table class="markdown-table"><thead><tr>${headerHtml}</tr></thead><tbody>${rowsHtml}</tbody></table>`;
       });
 
-      // Lists (unordered)
-      html = html.replace(/^[\s]*[-*+]\s+(.+)$/gm, '<li>$1</li>');
-      html = html.replace(/((?:<li>.*<\/li>\s*)+)/g, '<ul>$1</ul>');
+      // Lists (unordered) - improved handling
+      html = html.replace(/^[\s]*[-*+]\s+(.+)$/gm, (match, content, offset, string) => {
+        return `<li class="markdown-list-item">${content}</li>`;
+      });
+      
+      // Lists (ordered) - improved handling
+      html = html.replace(/^[\s]*\d+\.\s+(.+)$/gm, (match, content) => {
+        return `<li class="markdown-list-item markdown-ordered-item">${content}</li>`;
+      });
 
-      // Lists (ordered)
-      html = html.replace(/^[\s]*\d+\.\s+(.+)$/gm, '<li>$1</li>');
-      html = html.replace(/((?:<li>.*<\/li>\s*)+)/g, (match) => {
-        // Check if it's already wrapped in ul
-        if (match.includes('<ul>')) return match;
-        return `<ol>${match}</ol>`;
+      // Group consecutive list items
+      html = html.replace(/((?:<li class="markdown-list-item"[^>]*>.*?<\/li>\s*)+)/g, (match) => {
+        if (match.includes('markdown-ordered-item')) {
+          return `<ol class="markdown-list">${match}</ol>`;
+        }
+        return `<ul class="markdown-list">${match}</ul>`;
       });
 
       // Blockquotes

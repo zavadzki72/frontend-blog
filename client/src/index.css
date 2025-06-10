@@ -25,7 +25,7 @@
   --destructive-foreground: 0 0% 100%; /* #ffffff */
   --ring: 255 69% 71%; /* #986DFF */
   --radius: 0.5rem;
-  
+
   /* Custom colors */
   --purple: 255 69% 71%; /* #986DFF */
   --gray-custom: 220 8% 62%; /* #9CA3AF */
@@ -70,7 +70,7 @@
     @apply bg-background text-foreground font-archivo;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
-  
+
   html {
     font-family: 'Archivo', sans-serif;
   }
@@ -80,14 +80,14 @@
   .font-archivo {
     font-family: 'Archivo', sans-serif;
   }
-  
+
   .line-clamp-2 {
     overflow: hidden;
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
   }
-  
+
   .line-clamp-3 {
     overflow: hidden;
     display: -webkit-box;
@@ -169,7 +169,15 @@
 }
 
 .markdown-content blockquote {
-  @apply border-l-4 border-primary/20 pl-4 italic bg-muted/50 p-4 rounded-r-lg mb-4;
+  @apply border-l-4 border-primary/30 pl-6 pr-4 py-4 italic bg-muted/30 rounded-r-lg mb-6 text-muted-foreground;
+}
+
+.markdown-content blockquote p {
+  @apply mb-2 last:mb-0;
+}
+
+.markdown-content hr {
+  @apply border-muted-foreground/20 my-8 border-t-2;
 }
 
 .markdown-content code {
@@ -184,9 +192,6 @@
   @apply bg-transparent p-0;
 }
 
-.markdown-content hr {
-  @apply border-muted-foreground/20 my-8;
-}
 
 /* Tables */
 .markdown-content .markdown-table {
