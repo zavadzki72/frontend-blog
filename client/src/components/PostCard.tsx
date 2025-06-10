@@ -86,7 +86,7 @@ export function PostCard({ post, onUpvote }: PostCardProps) {
   return (
     <Card className="group overflow-hidden transition-all duration-300 hover:shadow-lg">
       <Link href={createPostUrl(post.id, post.title)} onClick={handleView}>
-        <div className="relative aspect-[1200/628] overflow-hidden">
+        <div className="relative aspect-[16/9] overflow-hidden">
           {coverImageUrl ? (
             <img
               src={coverImageUrl}
