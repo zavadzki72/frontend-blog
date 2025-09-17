@@ -174,7 +174,7 @@ const translations = {
     "footer.privacy": "Privacidade",
     "footer.terms": "Termos",
     "footer.contact": "Contato",
-    "footer.copyright": "© 2024 TechBlog. Todos os direitos reservados.",
+    "footer.copyright": "© 2025 Zava's Tech. Todos os direitos reservados.",
     
     // Common
     "common.search": "Buscar",
@@ -353,7 +353,7 @@ const translations = {
     "footer.privacy": "Privacy",
     "footer.terms": "Terms",
     "footer.contact": "Contact",
-    "footer.copyright": "© 2024 TechBlog. All rights reserved.",
+    "footer.copyright": "© 2025 Zava's Tech. All rights reserved.",
     
     // Common
     "common.search": "Search",
